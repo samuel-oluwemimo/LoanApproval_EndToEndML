@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
 from data_transformation import DataTransformation
+from model_training import ModelTrainer
 
 @dataclass
 class DataIngestionConfig:
@@ -42,7 +43,14 @@ class DataIngestion:
             raise CustomException(e, sys)
 
 if __name__ == '__main__':
+    #data ingestion
     obj=DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion()
+
+    # data processing and transformation
     transformer = DataTransformation()
-    transformer.preprocess_data(train_data, test_data, target_column='LoanApproved')
+    train, test = transformer.preprocess_data(train_data, test_data, target_column='LoanApproved')
+
+    #model Training
+    trainer = ModelTrainer()
+    trainer.model_training(train, test)
